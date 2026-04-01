@@ -44,8 +44,7 @@ my_app/
 
 ヘッダー検索パスとライブラリ検索パスをMakefile内で
 ```
--I../libs/libj/include
--L../libs/libj/lib
+-I../libs/libhimem/include
+-L../libs/libhimem/lib
 ```
-のように指定し、`-ldos -liocs -lhimem` でリンクできます。
-内部的にDOSコールとIOCSコールを使っているため、`-ldos -liocs`もリンクしてください。
+のように指定し、`-lhimem` でリンクできます。
