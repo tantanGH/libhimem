@@ -26,26 +26,6 @@ void* himem_malloc(size_t size) {
 }
 
 //
-//  allocate high memory block for array
-//
-void* himem_calloc(size_t count, size_t size) {
-
-    struct iocs_regs in_regs = { 0 };
-    struct iocs_regs out_regs = { 0 };
-
-    in_regs.d0 = 0xF8;      // IOCS _HIMEM
-    in_regs.d1 = 6;         // HIMEM_CALLOC
-    in_regs.d2 = count;
-    in_regs.d3 = size;
-
-    _iocs_trap15(&in_regs, &out_regs);
-
-    uint32_t rc = out_regs.d0;
-
-    return (rc == 0) ? (void*)out_regs.a1 : NULL;
-}
-
-//
 //  free high memory block
 //
 void himem_free(void* ptr) {
@@ -92,6 +72,46 @@ int32_t himem_resize(void* ptr, size_t size) {
     _iocs_trap15(&in_regs, &out_regs);
   
     return out_regs.d0;
+}
+
+//
+//  allocate high memory block for array
+//
+void* himem_calloc(size_t count, size_t size) {
+
+    struct iocs_regs in_regs = { 0 };
+    struct iocs_regs out_regs = { 0 };
+
+    in_regs.d0 = 0xF8;      // IOCS _HIMEM
+    in_regs.d1 = 6;         // HIMEM_CALLOC
+    in_regs.d2 = count;
+    in_regs.d3 = size;
+
+    _iocs_trap15(&in_regs, &out_regs);
+
+    uint32_t rc = out_regs.d0;
+
+    return (rc == 0) ? (void*)out_regs.a1 : NULL;
+}
+
+//
+//  allocate high memory block for array
+//
+void* himem_realloc(void* ptr, size_t size) {
+
+    struct iocs_regs in_regs = { 0 };
+    struct iocs_regs out_regs = { 0 };
+
+    in_regs.d0 = 0xF8;      // IOCS _HIMEM
+    in_regs.d1 = 7;         // HIMEM_REALLOC
+    in_regs.d2 = (uint32_t)ptr;
+    in_regs.d3 = (uint32_t)size;
+
+    _iocs_trap15(&in_regs, &out_regs);
+
+    uint32_t rc = out_regs.d0;
+
+    return (rc == 0) ? (void*)out_regs.a1 : NULL;
 }
 
 //
